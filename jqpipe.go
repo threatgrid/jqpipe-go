@@ -3,7 +3,7 @@
 
 	This package makes it easy for Go programs to filter JSON data using
 	stedolan's "jq". This is used internally at ThreatGRID as a sort of
-	expedient map/reduce in its distributed data store and in its "jqexpect"
+	expedient map/reduce in its distributed data store and in its "expectjq"
 	test utility.
 */
 package jq

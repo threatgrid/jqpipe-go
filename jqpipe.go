@@ -17,8 +17,8 @@ import (
 )
 
 // Eval starts a new Jq process to evaluate an expression with json input
-func Eval(js string, expr string) ([]json.RawMessage, error) {
-	jq, err := New(bytes.NewReader([]byte(js)), expr)
+func Eval(js string, expr string, opts ...string) ([]json.RawMessage, error) {
+	jq, err := New(bytes.NewReader([]byte(js)), expr, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -39,11 +39,12 @@ func Eval(js string, expr string) ([]json.RawMessage, error) {
 }
 
 // New wraps a jq.Pipe around an existing io.Reader, applying a JQ expression
-func New(r io.Reader, expr string) (*Pipe, error) {
+func New(r io.Reader, expr string, opts ...string) (*Pipe, error) {
 	var err error
 
 	proc := new(Pipe)
-	proc.jq = exec.Command("jq", "-c", expr)
+	opts = append(opts, expr)
+	proc.jq = exec.Command("jq", opts...)
 	proc.jq.Stdin = r
 
 	proc.stdout, err = proc.jq.StdoutPipe()

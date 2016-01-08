@@ -108,9 +108,8 @@ func (p *Pipe) Next() (json.RawMessage, error) {
 func (p *Pipe) Close() error {
 	if p.stdout != nil {
 		p.stdout.Close()
-		return nil
 	}
-	if p.jq != nil {
+	if p.jq == nil {
 		return nil
 	}
 	if p.jq.ProcessState != nil && p.jq.ProcessState.Exited() {

@@ -12,6 +12,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os/exec"
 )
@@ -101,7 +102,7 @@ func (p *Pipe) Next() (json.RawMessage, error) {
 		return nil, io.EOF
 	}
 
-	return nil, errors.New("unexplained jq failure")
+	return nil, errors.New(fmt.Sprintf("unexplained jq failure - processState: %s", p.jq.ProcessState.String()))
 }
 
 // Close attempts to halt the jq process if it has not already exited.  This is only necessary if Next has not returned io.EOF.

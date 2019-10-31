@@ -90,7 +90,7 @@ func (p *Pipe) Next() (json.RawMessage, error) {
 	}
 
 	// terminate jq (if it hasn't died already)
-	p.jq.Process.Kill()
+	defer p.jq.Process.Kill()
 	p.jq.Wait()
 
 	// if jq complained, that's our error

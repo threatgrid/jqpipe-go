@@ -12,6 +12,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os/exec"
 )
@@ -88,8 +89,7 @@ func (p *Pipe) Next() (json.RawMessage, error) {
 		return nil, err
 	}
 
-	// terminate jq (if it hasn't died already)
-	p.jq.Process.Kill()
+	// wait for the program to exit on its own
 	p.jq.Wait()
 
 	// if jq complained, that's our error
@@ -101,7 +101,8 @@ func (p *Pipe) Next() (json.RawMessage, error) {
 		return nil, io.EOF
 	}
 
-	return nil, errors.New("unexplained jq failure")
+	// provide detailed state and error information if we reach this point
+	return nil, errors.New(fmt.Sprintf("unexplained jq failure - processState: %s, err: %s", p.jq.ProcessState.String(), err.Error()))
 }
 
 // Close attempts to halt the jq process if it has not already exited.  This is only necessary if Next has not returned io.EOF.

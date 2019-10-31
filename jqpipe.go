@@ -102,7 +102,7 @@ func (p *Pipe) Next() (json.RawMessage, error) {
 		return nil, io.EOF
 	}
 
-	return nil, errors.New(fmt.Sprintf("unexplained jq failure - processState: %s", p.jq.ProcessState.String()))
+	return nil, errors.New(fmt.Sprintf("unexplained jq failure - processState: %s, err: %s", p.jq.ProcessState.String(), err.Error()))
 }
 
 // Close attempts to halt the jq process if it has not already exited.  This is only necessary if Next has not returned io.EOF.
